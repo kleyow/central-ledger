@@ -1,0 +1,193 @@
+{
+  "name": "@mojaloop/central-ledger",
+<<<<<<< HEAD
+  "version": "11.3.3",
+=======
+  "version": "13.0.1",
+>>>>>>> upstream/master
+  "description": "Central ledger hosted by a scheme to record and settle transfers",
+  "license": "Apache-2.0",
+  "author": "ModusBox",
+  "contributors": [
+    "Georgi Georgiev <georgi.georgiev@modusbox.com>",
+    "Georgi Logodazhki <georgi.logodazhki@modusbox.com>",
+    "Henk Kodde <henkkodde@modusbox.com>",
+    "Lazola Lucas <lazola.lucas@modusbox.com>",
+    "Lewis Daly <lewisd@crosslaketech.com>",
+    "Miguel de Barros <miguel.debarros@modusbox.com>",
+    "Rajiv Mothilal <rajiv.mothilal@modusbox.com>",
+    "Sam Kummary <sam@modusbox.com>",
+    "Steven Oderayi <steven.oderayi@modusbox.com>",
+    "Valentin Genev <valentin.genev@modusbox.com>",
+<<<<<<< HEAD
+    "Shashikant Hirugade <shashikant.hirugade@modusbox.com>",
+    "Paweł Marzec <pawel.marzec@modusbox.com>",
+    "Kevin Leylow <kevin.leyow@modusbox.com>"
+=======
+    "Shashikant Hirugade <shashikant.hirugade@modusbox.com>"
+>>>>>>> upstream/master
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mojaloop/central-ledger.git"
+  },
+  "config": {
+    "knex": "--knexfile ./config/knexfile.js",
+    "images": {
+      "api": "central-ledger",
+      "admin": "central-ledger-admin"
+    }
+  },
+  "standard": {
+    "ignore": [
+      "/migrations/**"
+    ]
+  },
+  "pre-commit": [
+    "lint",
+    "dep:check",
+    "test"
+  ],
+  "scripts": {
+    "start": "run-p start:api",
+    "start:api": "node src/api/index.js",
+    "watch:api": "nodemon src/api/index.js",
+    "start:handlers": "node src/handlers/index.js",
+    "dev": "npm run docker:stop && docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d",
+    "test": "npm run test:unit | faucet",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test:unit": "tape 'test/unit/**/**.test.js'",
+    "test:int": "tape 'test/integration/**/*.test.js'",
+    "test:all": "run-s test test:integration test:functional test:spec",
+    "test:xunit": "tape 'test/unit/**/*.test.js' | tap-xunit",
+    "test:coverage": "nyc --reporter=lcov --reporter=text-summary tapes -- 'test/unit/**/*.test.js'",
+    "test:coverage-check": "npm run test:coverage && nyc check-coverage",
+    "test:integration": "sh ./test/integration-runner.sh ./test/integration-runner.env",
+    "db:psql": "docker run -it --net centralledger_back --rm postgres:9.4 sh -c 'exec psql -h postgres -p \"$POSTGRES_PORT_5432_TCP_PORT\" -U central_ledger -d postgres'",
+    "migrate": "run-s migrate:latest seed:run",
+    "migrate:latest": "knex $npm_package_config_knex migrate:latest",
+    "migrate:create": "knex migrate:make $npm_package_config_knex",
+    "migrate:rollback": "knex migrate:rollback $npm_package_config_knex",
+    "migrate:current": "knex migrate:currentVersion $npm_package_config_knex",
+    "seed:run": "knex seed:run $npm_package_config_knex",
+    "docker:build": "run-s docker:build:test docker:build:api docker:build:admin",
+    "docker:build:test": "docker build --no-cache -f test.Dockerfile -t $npm_package_config_images_api:test .",
+    "docker:build:api": "docker build --no-cache -f api.Dockerfile -t $npm_package_config_images_api:latest .",
+    "docker:build:admin": "docker build --no-cache -f admin.Dockerfile -t $npm_package_config_images_admin:latest .",
+    "docker:up": "docker-compose -f docker-compose.yml up",
+    "docker:stop": "docker-compose -f docker-compose.yml stop",
+    "docker:rm": "docker-compose -f docker-compose.yml rm -f -v",
+    "docker:down": "docker-compose -f docker-compose.yml down -v",
+    "docker:clean": "docker-compose -f docker-compose.yml down --rmi local",
+    "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.json",
+    "audit:resolve": "SHELL=sh resolve-audit --production",
+    "audit:check": "SHELL=sh check-audit --production",
+    "dep:check": "npx ncu -e 2",
+    "dep:update": "npx ncu -u"
+  },
+  "dependencies": {
+    "@hapi/good": "9.0.1",
+<<<<<<< HEAD
+    "@hapi/hapi": "20.0.3",
+    "@hapi/inert": "6.0.3",
+    "@hapi/vision": "6.0.1",
+    "@mojaloop/central-object-store": "11.0.1-snapshot",
+    "@mojaloop/central-services-database": "10.6.1",
+    "@mojaloop/central-services-error-handling": "10.6.0",
+    "@mojaloop/central-services-health": "10.6.0",
+    "@mojaloop/central-services-logger": "10.6.0",
+    "@mojaloop/central-services-metrics": "9.5.0",
+    "@mojaloop/central-services-shared": "11.5.2",
+=======
+    "@hapi/hapi": "20.1.0",
+    "@hapi/inert": "6.0.3",
+    "@hapi/joi": "17.1.1",
+    "@hapi/vision": "6.0.1",
+    "@mojaloop/central-object-store": "11.0.0-snapshot",
+    "@mojaloop/central-services-database": "10.6.1",
+    "@mojaloop/central-services-error-handling": "11.1.0",
+    "@mojaloop/central-services-health": "11.0.0",
+    "@mojaloop/central-services-logger": "10.6.0",
+    "@mojaloop/central-services-metrics": "9.5.0",
+    "@mojaloop/central-services-shared": "11.5.5",
+>>>>>>> upstream/master
+    "@mojaloop/central-services-stream": "10.6.0",
+    "@mojaloop/event-sdk": "10.6.0",
+    "@mojaloop/forensic-logging-client": "8.3.0",
+    "@mojaloop/ml-number": "11.0.0",
+<<<<<<< HEAD
+    "@now-ims/hapi-now-auth": "2.0.2",
+=======
+    "@now-ims/hapi-now-auth": "2.0.3",
+>>>>>>> upstream/master
+    "awaitify-stream": "1.0.2",
+    "base64url": "3.0.1",
+    "blipp": "4.0.2",
+    "catbox-memory": "4.0.1",
+<<<<<<< HEAD
+    "commander": "6.2.0",
+=======
+    "commander": "7.0.0",
+>>>>>>> upstream/master
+    "cron": "1.8.2",
+    "decimal.js": "10.2.1",
+    "docdash": "1.2.0",
+    "event-stream": "4.0.1",
+    "five-bells-condition": "5.0.1",
+    "glob": "7.1.6",
+    "hapi-auth-basic": "5.0.0",
+    "hapi-auth-bearer-token": "8.0.0",
+<<<<<<< HEAD
+    "ilp-packet": "2.2.0",
+    "joi": "17.3.0",
+    "knex": "0.21.12",
+    "lodash": "4.17.20",
+    "moment": "2.29.1",
+    "mongoose": "5.11.6",
+=======
+    "hapi-swagger": "14.1.0",
+    "ilp-packet": "2.2.0",
+    "knex": "0.21.17",
+    "lodash": "4.17.20",
+    "moment": "2.29.1",
+    "mongoose": "5.11.15",
+>>>>>>> upstream/master
+    "npm-run-all": "4.1.5",
+    "rc": "1.2.8",
+    "require-glob": "3.2.0",
+    "uuid4": "2.0.2"
+  },
+  "optionalDependencies": {
+    "mysql": "2.18.1"
+  },
+  "devDependencies": {
+    "async-retry": "1.3.1",
+    "faucet": "0.0.1",
+    "get-port": "5.1.1",
+    "jsdoc": "3.6.6",
+<<<<<<< HEAD
+    "jsonpath": "1.0.2",
+    "nodemon": "2.0.6",
+    "npm-audit-resolver": "2.2.1",
+    "npm-check-updates": "10.2.3",
+    "nyc": "15.1.0",
+    "pre-commit": "1.2.2",
+    "proxyquire": "2.1.3",
+    "sinon": "9.2.1",
+=======
+    "jsonpath": "1.1.0",
+    "nodemon": "2.0.7",
+    "npm-audit-resolver": "2.2.1",
+    "npm-check-updates": "11.1.1",
+    "nyc": "15.1.0",
+    "pre-commit": "1.2.2",
+    "proxyquire": "2.1.3",
+    "sinon": "9.2.4",
+>>>>>>> upstream/master
+    "standard": "16.0.3",
+    "tap-xunit": "2.4.1",
+    "tape": "4.13.2",
+    "tapes": "4.1.0"
+  }
+}

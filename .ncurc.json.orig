@@ -1,0 +1,11 @@
+{
+  "reject": [
+<<<<<<< HEAD
+    "hapi-swagger",
+=======
+>>>>>>> upstream/master
+    "tape",
+    "ilp-packet"
+  ]
+}
+
